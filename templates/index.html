@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <title>Flask Intro - login page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <div class="container">
+        <h1><strong>Welcome,</strong> {{ ao3user }}</h1>
+
+    <button id="1month">Last month</button>
+    <button id="6month">Last 6 months</button>
+    <button id="1yr">Last year</button>
+
+    <script>
+        document.getElementById("1month").addEventListener("click", function() {
+            window.location.href = "/stats?time=1";
+        });
+        document.getElementById("6month").addEventListener("click", function() {
+            window.location.href = "/stats?time=6";
+        });
+        document.getElementById("1yr").addEventListener("click", function() {
+            window.location.href = "/stats?time=12";
+        });
+    </script>
+  </body>
+</html>
