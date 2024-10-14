@@ -5,7 +5,24 @@
     <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
   </head>
   <body>
-    <p><strong>Total words</strong> {{ wordCount }}</p>
+    <p><strong>You read</strong> {{ wordCount }} words this year!</p>
+    <br>
+    <p>Your top tags</p>
+    <ul>
+        {% for item in tags %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+    <br>
+    <p>Your favorite fic was {{visitedWork.title}} by {% for author in visitedWork.authors %}
+        {{ author.username }} and 
+    {% endfor %}</p>
+    <p>You visited it {{mostVisited }} times!</p>
+    <br>
+    <p>Fandom breakdown:</p>
     <img src={{ url}} alt="Chart" height="300" width="300">
   </body>
+  <footer>
+    <p><a href="{{ url_for('home', ao3user=session['username']) }}">Home</a></p>
+  </footer>
 </html>

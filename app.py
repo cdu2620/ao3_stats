@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request, session
 import AO3  
+import operator
 from datetime import datetime
 import secrets
 import matplotlib
@@ -24,6 +25,8 @@ def get_stats(session, date):
     totalWordCount = 0
     tags = []
     history = session.get_history()
+    mostVisited = 0
+    visitedWork = None
     for i in range(len(history)):
         try:
             work = AO3.Work(history[i][0].id)
@@ -31,6 +34,9 @@ def get_stats(session, date):
                 totalWordCount += work.words
                 wordCounts.append(work.words)       
                 tags.append(work.tags)
+                if history[i][1] > mostVisited:
+                    mostVisited = history[i][1]
+                    visitedWork = work
                 if work.fandoms[0] not in fandomVals:
                     fandomVals[work.fandoms[0]] = 1
                 else:
@@ -42,9 +48,18 @@ def get_stats(session, date):
     # Create the pie chart
     plt.figure(figsize=(6, 6))
     plt.pie(values, labels=labels, autopct='%1.1f%%')
-    imgUrl = 'static/images/new_plot.png'
+    imgUrl = f"static/images/{date}_plot.png"
     plt.savefig(imgUrl)
-    return (tags, totalWordCount, imgUrl)
+    flattened_tags = [element for sublist in tags for element in sublist]
+    tagCount = {}
+    for tag in flattened_tags:
+        if tag not in tagCount:
+            tagCount[tag] = 1
+        else:
+            tagCount[tag] +=1
+    if len(tagCount) >= 5:
+        tagCount = dict(sorted(tagCount.items(), key=operator.itemgetter(1), reverse=True)[:5])
+    return (tagCount, mostVisited, visitedWork, totalWordCount, imgUrl)
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -67,5 +82,5 @@ def home():
 def stats():
     login = AO3.Session(session['username'], session['password'])
     time = request.args.get("time") 
-    (tags, totalWordCount, imgUrl) = get_stats(login, time)
-    return render_template('stats.html', wordCount = totalWordCount, url=imgUrl)
+    (tags, mostVisitedWork, visitedWork, totalWordCount, imgUrl) = get_stats(login, time)
+    return render_template('stats.html', tags = tags, mostVisited = mostVisitedWork, visitedWork = visitedWork, wordCount = totalWordCount, url=imgUrl)
