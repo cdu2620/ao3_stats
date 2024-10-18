@@ -15,7 +15,7 @@ app.secret_key = secrets.token_hex()
 def check_date(work, time):
     if (time == 1 and work.month ==  datetime.now().month and work.year == datetime.now().year) \
         or (time == 12 and work.year == datetime.now().year) \
-        or (time == 6 and datetime.now().month - time <= work.month):
+        or (time == 6 and datetime.now().month - time <= work.month) or time == 100:
         return True 
     return False
 
