@@ -1,8 +1,7 @@
 <html>
   <head>
-    <title>Flask Intro - login page</title>
+    <title>Stats</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
   </head>
   <body>
     <p><strong>You read</strong> {{ wordCount }} words this year!</p>
@@ -15,7 +14,7 @@
     </ul>
     <br>
     <p>Your favorite fic was {{visitedWork.title}} by {% for author in visitedWork.authors %}
-        {{ author.username }} and 
+        {{ author.username }} {% if not loop.last %} and 
     {% endfor %}</p>
     <p>You visited it {{mostVisited }} times!</p>
     <br>

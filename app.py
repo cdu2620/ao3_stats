@@ -1,9 +1,11 @@
 from flask import Flask, render_template, redirect, url_for, request, session
 import AO3  
+import dill
 import operator
 from datetime import datetime
 import secrets
 import matplotlib
+import json
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
@@ -19,17 +21,21 @@ def check_date(work, time):
         return True 
     return False
 
-def get_stats(session, date):
+def get_stats(login, date):
     fandomVals = {}
     wordCounts = []
     totalWordCount = 0
     tags = []
-    history = session.get_history()
+    if 'history' in session:
+        history = dill.loads(session['history'])
+    else:
+        history = login.get_history()
+        session['history'] = dill.dumps(history)
     mostVisited = 0
     visitedWork = None
     for i in range(len(history)):
         try:
-            work = AO3.Work(history[i][0].id)
+            work = AO3.Work(history[i][0].id, session=login)
             if check_date(history[i][2], int(date)):
                 totalWordCount += work.words
                 wordCounts.append(work.words)       
