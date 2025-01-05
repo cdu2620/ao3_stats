@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, url_for, request, session
 import AO3  
 import dill
 import operator
-from datetime import datetime
+from datetime import datetime, timedelta
 import secrets
 import matplotlib
 import json
@@ -13,11 +13,19 @@ app = Flask(__name__)
 
 app.secret_key = secrets.token_hex()
 
+def month_year_to_datetime(month, year):
+    return datetime(year, month, 1)
+
+def is_within_year(dt, days):
+    today = datetime.now()
+    ago = today - timedelta(days=days)
+    return ago <= dt <= today
 
 def check_date(work, time):
-    if (time == 1 and work.month ==  datetime.now().month and work.year == datetime.now().year) \
-        or (time == 12 and work.year == datetime.now().year) \
-        or (time == 6 and datetime.now().month - time <= work.month) or time == 100:
+    workDate = month_year_to_datetime(int(work.month), int(work.year))
+    if (time == 1 and is_within_year(workDate, 30)) \
+        or (time == 12 and is_within_year(workDate, 183)) \
+        or (time == 6 and is_within_year(workDate, 365)) or time == 100:
         return True 
     return False
 

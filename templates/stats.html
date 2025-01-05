@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
-    <p><strong>You read</strong> {{ wordCount }} words this year!</p>
+    <p><strong>You read</strong> {{ wordCount }} words in this time period!</p>
     <br>
     <p>Your top tags</p>
     <ul>
@@ -14,7 +14,7 @@
     </ul>
     <br>
     <p>Your favorite fic was {{visitedWork.title}} by {% for author in visitedWork.authors %}
-        {{ author.username }} {% if not loop.last %} and 
+        {{ author.username }} {% if not loop.last %} and {% endif %}
     {% endfor %}</p>
     <p>You visited it {{mostVisited }} times!</p>
     <br>

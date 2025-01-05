@@ -5,3 +5,5 @@ Welcome to AO3 stats! Here you can view your stats for short term and long term 
 ![Login](screenshots/ss1.png)
 
 Sample stats
+
+![Stats](screenshots/ss2.png)
