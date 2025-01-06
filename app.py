@@ -24,8 +24,8 @@ def is_within_year(dt, days):
 def check_date(work, time):
     workDate = month_year_to_datetime(int(work.month), int(work.year))
     if (time == 1 and is_within_year(workDate, 30)) \
-        or (time == 12 and is_within_year(workDate, 183)) \
-        or (time == 6 and is_within_year(workDate, 365)) or time == 100:
+        or (time == 6 and is_within_year(workDate, 183)) \
+        or (time == 12 and is_within_year(workDate, 365)) or time == 100:
         return True 
     return False
 
